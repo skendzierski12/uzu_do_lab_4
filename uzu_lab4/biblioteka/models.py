@@ -54,3 +54,30 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Stanowisko(models.Model):
+    """Model reprezentujący stanowisko"""
+    nazwa = models.CharField(max_length=70, null=False, blank=False)
+    opis = models.TextField(null=True, blank=True)
+
+
+class Osoba(models.Model):
+    """Model reprezentujący osobę"""
+
+    PLEC_WYBOR = (
+    ('K', 'kobieta'),
+    ('M', 'mezczyzna'),
+    ('U', 'undefined')
+    )
+    
+    imie = models.CharField(max_length=50, null=False, blank=False)
+    nazwisko = models.CharField(max_length=50, null=False, blank=False)
+    plec = models.CharField(max_length = 1, choices=PLEC_WYBOR, default="U")
+
+    plec = models.IntegerChoices()
+
+    stanowisko = models.ForeignKey('Stanowisko', on_delete = models.CASCADE)
+    data_dodania = models.DataField(auto_now_add=True)
+
+
