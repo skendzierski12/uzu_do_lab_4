@@ -13,6 +13,11 @@ BOOK_FORMATS = (
     ('A', 'Audiobook'),
 )
 
+PLCIE =  models.IntegerChoices(
+    'PLEC',
+    'Kobieta Mezczyzna Inne'
+)
+
 
 class Genre(models.Model):
     """Model reprezentujący gatunek literacki."""
@@ -73,11 +78,7 @@ class Osoba(models.Model):
     
     imie = models.CharField(max_length=50, null=False, blank=False)
     nazwisko = models.CharField(max_length=50, null=False, blank=False)
-    plec = models.CharField(max_length = 1, choices=PLEC_WYBOR, default="U")
-
-    plec = models.IntegerChoices()
-
+    plec = models.IntegerField(choices=PLCIE.choices, default=PLCIE.choices[2][0])
     stanowisko = models.ForeignKey('Stanowisko', on_delete = models.CASCADE)
-    data_dodania = models.DataField(auto_now_add=True)
-
+    data_dodania = models.DateField(auto_now_add=True, editable = False)
 
