@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Book, Author, Genre, MONTHS, BOOK_FORMATS
+from .models import Book, Author, Genre, Osoba, Stanowisko, MONTHS, BOOK_FORMATS
 from rest_framework.validators import UniqueTogetherValidator
 
 
@@ -66,7 +66,7 @@ class BookSerializer(serializers.ModelSerializer):
     
 
     def validate_title(self,value):
-        if not value.istitle():
+        if not value[0].isupper():
             raise serializers.ValidationError(
                 "Tytuł książki powinien rozpoczynać się wielką literą!"
             )
@@ -88,7 +88,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         last_name = data.get('last_name')
         country = data.get('country')
 
-        if first_name and not first_name.istitle():
+        if first_name and not first_name[0].isupper():
             raise serializers.ValidationError(
                 {"first_name":"Imię powinno się zaczynać wielką literą!"}
             )
@@ -111,8 +111,38 @@ class GenreSerializer(serializers.ModelSerializer):
         models = Genre
         fields = "__all__"    
     
-#
-# ZAD DOM  dorobic do Stanowiska i Osoby serializer!!! zad5
-#zad 6
-#zadanie 7
+
+class OsobaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Osoba
+        fields = "__all__"
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Osoba.objects.all(),
+                fields=['imie', 'nazwisko']
+
+            )]
+    def validate(self,data):
+        imie = data.get('imie')
+        nazwisko = data.get('nazwisko')
+        country = data.get('country')
+
+        if imie and not imie[0].isupper():
+            raise serializers.ValidationError(
+                {"imie":"Imię powinno się zaczynać wielką literą!"}
+            )        
+        if nazwisko and not nazwisko[0].isupper():
+            raise serializers.ValidationError(
+                {"nazwisko":"Nazwisko powinno się zaczynać wielką literą!"}
+            )
+        return data 
+
+class StanowiskoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stanowisko
+        fields = "__all__"
+
+#zadanie 7!!!
+
+
 
