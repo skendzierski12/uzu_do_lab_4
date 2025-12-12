@@ -4,6 +4,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Book
 from .serializers import BookSerializer
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
+
+
 
 # określamy dostępne metody żądania dla tego endpointu
 @api_view(['GET', "POST"])
@@ -55,3 +59,12 @@ def book_detail(request, pk):
     elif request.method == 'DELETE':
         book.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class BookListView(ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+
+    
+class BookDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
